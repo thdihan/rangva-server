@@ -1,0 +1,39 @@
+{
+    "name": "health-connect-backend-nodejs",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "scripts": {
+        "dev": "ts-node-dev --respawn --transpile-only src/server.ts"
+    },
+    "devDependencies": {
+        "@types/bcrypt": "^5.0.2",
+        "@types/cookie-parser": "^1.4.9",
+        "@types/cors": "^2.8.18",
+        "@types/express": "^5.0.2",
+        "@types/jsonwebtoken": "^9.0.9",
+        "@types/lodash": "^4.17.17",
+        "@types/multer": "^1.4.13",
+        "@types/node": "^22.15.30",
+        "@types/nodemailer": "^6.4.17",
+        "ts-node-dev": "^2.0.0",
+        "tsx": "^4.19.4",
+        "typescript": "^5.8.3"
+    },
+    "dependencies": {
+        "@prisma/client": "6.9.0",
+        "bcrypt": "^6.0.0",
+        "cloudinary": "^2.6.1",
+        "cookie-parser": "^1.4.7",
+        "cors": "^2.8.5",
+        "dotenv": "^16.5.0",
+        "express": "^5.1.0",
+        "http-status": "^2.1.0",
+        "jsonwebtoken": "^9.0.2",
+        "lodash": "^4.17.21",
+        "multer": "^2.0.1",
+        "nodemailer": "^7.0.3",
+        "prisma": "^6.13.0",
+        "zod": "^3.25.61"
+    }
+}
