@@ -1,7 +1,7 @@
 import prisma from "../../utils/prisma";
 import bcrypt from "bcrypt";
 import { JwtHelper } from "../../utils/jwtHelper";
-import { UserStatus } from "../../../generated/prisma";
+import { UserRole, UserStatus } from "../../../generated/prisma";
 import config from "../../config";
 import { emailSender } from "../../utils/emailSender";
 import ApiError from "../../errors/ApiError";
@@ -16,6 +16,23 @@ const login = async (payload: { email: string; password: string }) => {
             email: payload.email,
             status: UserStatus.ACTIVE,
         },
+        select: {
+            id: true,
+            email: true,
+            password: true,
+            role: true,
+            status: true,
+            createdAt: true,
+            updatedAt: true,
+            admin: {
+                select: {
+                    id: true,
+                    name: true,
+                    profilePhoto: true,
+                    contactNumber: true,
+                },
+            },
+        },
     });
 
     console.log("[LOG : auth.service -> login()] Result\n", result);
@@ -29,6 +46,7 @@ const login = async (payload: { email: string; password: string }) => {
 
     const accessToken = JwtHelper.generateToken(
         {
+            name: result.role == UserRole.ADMIN ? result.admin?.name : "",
             email: result.email,
             role: result.role,
         },
@@ -46,7 +64,6 @@ const login = async (payload: { email: string; password: string }) => {
     );
     return {
         accessToken,
-        needPasswordChange: result.needPasswordChange,
         refreshToken,
     };
 };

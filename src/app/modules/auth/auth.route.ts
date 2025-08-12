@@ -9,22 +9,12 @@ router.post("/login", AuthController.login);
 router.post("/refresh", AuthController.refreshToken);
 router.post(
     "/change-password",
-    auth(
-        UserRole.ADMIN,
-        UserRole.SUPER_ADMIN,
-        UserRole.DOCTOR,
-        UserRole.PATIENT
-    ),
+    auth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
     AuthController.passwordChange
 );
 router.post(
     "/forgot-password",
-    auth(
-        UserRole.ADMIN,
-        UserRole.SUPER_ADMIN,
-        UserRole.DOCTOR,
-        UserRole.PATIENT
-    ),
+    auth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
     AuthController.forgotPassword
 );
 router.post("/reset-password", AuthController.resetPassword);
