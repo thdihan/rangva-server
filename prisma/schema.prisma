@@ -67,7 +67,11 @@ model Category {
   id          String  @id @default(uuid())
   name        String
   image       String
+  isActive    Boolean @default(false)
   description String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("category")
 }
