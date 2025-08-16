@@ -4,6 +4,7 @@ import { globalErrorHandler } from "./app/middlewares/globalErrorHandler";
 import httpStatus from "http-status";
 import cookieParser from "cookie-parser";
 import router from "./app/router";
+import path from "path";
 
 const app: Application = express();
 
@@ -15,6 +16,9 @@ app.use(
     })
 );
 app.use(cookieParser());
+
+// Serve static files from public directory
+app.use("/public", express.static(path.join(__dirname, "../public")));
 
 app.use("/api/v1", router);
 app.get("/", (req: Request, res: Response) => {

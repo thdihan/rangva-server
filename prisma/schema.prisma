@@ -75,3 +75,24 @@ model Category {
 
   @@map("category")
 }
+
+// Gallery Related Models 
+
+model Gallery {
+  id           String  @id @default(uuid())
+  name         String
+  originalName String
+  url          String
+  cloudinaryId String?
+  localPath    String?
+  storageType  String  @default("local")
+  size         Int
+  mimeType     String
+  isActive     Boolean @default(true)
+  description  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("gallery")
+}
