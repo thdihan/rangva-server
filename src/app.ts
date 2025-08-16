@@ -9,10 +9,11 @@ import path from "path";
 const app: Application = express();
 
 app.use(cors()); // Enables Cross-Origin Resource Sharing
-app.use(express.json()); // Parses incoming JSON requests
+app.use(express.json({ limit: "10mb" })); // Parses incoming JSON requests with 10MB limit
 app.use(
     express.urlencoded({
         extended: true,
+        limit: "10mb", // Increase URL-encoded data limit
     })
 );
 app.use(cookieParser());

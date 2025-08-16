@@ -15,7 +15,7 @@ export const ALLOWED_IMAGE_TYPES = [
     "image/webp",
 ];
 
-export const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+export const MAX_FILE_SIZE = parseInt(process.env.MAX_FILE_SIZE || "10485760"); // 10MB default (10 * 1024 * 1024)
 
 // Storage configuration
 export const STORAGE_TYPE = process.env.STORAGE_TYPE || "local"; // "cloudinary" or "local"
