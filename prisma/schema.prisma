@@ -73,7 +73,169 @@ model Category {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // Relations
+  products Product[]
+
   @@map("category")
+}
+
+model Product {
+  id               String  @id @default(uuid())
+  name             String
+  slug             String  @unique
+  description      String?
+  shortDescription String?
+
+  // Pricing
+  price     Decimal  @db.Decimal(10, 2)
+  salePrice Decimal? @db.Decimal(10, 2)
+  costPrice Decimal? @db.Decimal(10, 2)
+
+  // Inventory
+  sku        String? @unique
+  stock      Int     @default(0)
+  minStock   Int     @default(0)
+  maxStock   Int?
+  trackStock Boolean @default(true)
+
+  // Physical attributes
+  weight     Decimal? @db.Decimal(8, 3)
+  dimensions String? // JSON string: {"length": 10, "width": 5, "height": 3}
+
+  // Product status
+  status     ProductStatus @default(DRAFT)
+  isActive   Boolean       @default(true)
+  isFeatured Boolean       @default(false)
+  isDigital  Boolean       @default(false)
+
+  // SEO
+  metaTitle       String?
+  metaDescription String?
+  metaKeywords    String?
+
+  // Media
+  images    String[] // Array of image URLs
+  thumbnail String?
+  gallery   String[] // Array of gallery image URLs
+
+  // Category relation
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  // Additional attributes (JSON)
+  attributes     Json? // Custom attributes like color, size, etc.
+  specifications Json? // Technical specifications
+
+  // Timestamps
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  publishedAt DateTime?
+
+  // Relations
+  productVariants ProductVariant[]
+  reviews         ProductReview[]
+  tags            ProductTag[]
+
+  @@index([categoryId])
+  @@index([status])
+  @@index([isActive])
+  @@index([isFeatured])
+  @@index([slug])
+  @@index([sku])
+  @@map("products")
+}
+
+model ProductVariant {
+  id        String  @id @default(uuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  // Variant details
+  name      String
+  sku       String?  @unique
+  price     Decimal  @db.Decimal(10, 2)
+  salePrice Decimal? @db.Decimal(10, 2)
+  stock     Int      @default(0)
+  isActive  Boolean  @default(true)
+
+  // Variant attributes (e.g., size: "L", color: "Red")
+  attributes Json
+
+  // Media
+  image String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
+  @@index([sku])
+  @@map("product_variants")
+}
+
+model ProductReview {
+  id        String  @id @default(uuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  // Review details
+  rating  Int // 1-5 stars
+  title   String?
+  comment String
+
+  // Reviewer info
+  reviewerName  String
+  reviewerEmail String
+
+  // Status
+  isApproved Boolean @default(false)
+  isVerified Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
+  @@index([rating])
+  @@index([isApproved])
+  @@map("product_reviews")
+}
+
+model Tag {
+  id          String  @id @default(uuid())
+  name        String  @unique
+  slug        String  @unique
+  description String?
+  color       String? // Hex color for tag display
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  products ProductTag[]
+
+  @@map("tags")
+}
+
+model ProductTag {
+  id        String @id @default(uuid())
+  productId String
+  tagId     String
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  tag     Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([productId, tagId])
+  @@index([productId])
+  @@index([tagId])
+  @@map("product_tags")
+}
+
+enum ProductStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+  OUT_OF_STOCK
 }
 
 // Gallery Related Models 
